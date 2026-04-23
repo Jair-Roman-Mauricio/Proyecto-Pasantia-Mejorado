@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY backup-service/package.json backup-service/package-lock.json* ./
+RUN npm install --omit=dev
+
+COPY backup-service/src ./src
+
+# Directorio donde se almacenan los archivos de backup (montar volumen aquí)
+RUN mkdir -p /backups
+
+EXPOSE 4000
+
+CMD ["node", "src/index.js"]

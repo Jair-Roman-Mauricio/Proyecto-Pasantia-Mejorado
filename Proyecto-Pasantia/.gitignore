@@ -1,0 +1,23 @@
+# Claude Code internal files
+.claude/plans
+
+# Python
+__pycache__/
+*.py[cod]
+.env
+!backend/.env.example
+venv/
+.venv/
+
+# Storage uploads
+backend/storage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+#Node Modules
+node_modules/
+
+# Script de deploy (contiene rutas locales de la clave SSH)
+deploy.sh

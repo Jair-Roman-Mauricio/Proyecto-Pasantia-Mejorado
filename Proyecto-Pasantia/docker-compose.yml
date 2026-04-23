@@ -1,0 +1,76 @@
+version: "3.9"
+
+# ══════════════════════════════════════════════════════════════════
+#  Linea 1 Metro — Docker Compose
+#
+#  MODO SUPABASE (default) — BD externa:
+#    docker compose up -d
+#    → levanta: backend + frontend
+#    → la BD se configura en backend/.env (DATABASE_URL)
+#
+#  MODO BD LOCAL — PostgreSQL en contenedor:
+#    docker compose --profile local up -d
+#    → levanta: db + backend + frontend
+# ══════════════════════════════════════════════════════════════════
+
+services:
+
+  # ── Base de datos local (solo con --profile local) ────────────────
+  db:
+    profiles: [local]
+    image: postgres:16-alpine
+    restart: always
+    env_file: backend/.env
+    environment:
+      POSTGRES_DB: linea1metro
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d linea1metro"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend FastAPI ───────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    restart: always
+    env_file: backend/.env
+    volumes:
+      - storage_data:/app/storage
+
+  # ── Frontend (nginx) ──────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  # ── Backup service (cron diario + API manual) ────────────────────
+  backup:
+    build:
+      context: .
+      dockerfile: Dockerfile.backup
+    restart: always
+    environment:
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY}
+      BACKUP_DIR: /backups
+      CRON_SCHEDULE: "59 23 * * *"
+      PORT: "4000"
+      TZ: America/Guayaquil
+    volumes:
+      - backup_data:/backups
+    ports:
+      - "4000:4000"
+
+volumes:
+  postgres_data:
+  storage_data:
+  backup_data:

@@ -170,8 +170,8 @@ export default function CircuitForm({ barId, bars, onClose, onCreated, editingCi
       <Modal isOpen onClose={onClose} title={isEditMode ? 'Editar Circuito' : 'Agregar Nuevo Circuito'} size="lg">
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <Input label="Denominacion *" value={denomination} onChange={(e) => setDenomination(e.target.value)} />
-            <Input label="Nombre *" value={name} onChange={(e) => setName(e.target.value)} />
+            <Input label="Denominacion *" value={denomination} onChange={(e) => setDenomination(e.target.value)} placeholder="Ej: ESC-01, PLP-2N, TPA" />
+            <Input label="Nombre *" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej: Alumbrado, Tomacorrientes, UPS Sala" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -183,7 +183,7 @@ export default function CircuitForm({ barId, bars, onClose, onCreated, editingCi
                 <option value="reserve_equipped_re">Reserva Equipada (R/E)</option>
               </select>
             </div>
-            <Input label="Descripcion" value={description} onChange={(e) => setDescription(e.target.value)} />
+            <Input label="Descripcion" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Ej: ADRO LUZ Y TOMAS F.M. ESTACIÓN" />
           </div>
           {/* Campo de fecha de expiración: aparece condicionalmente solo para estados de reserva */}
           {isReserve && (
@@ -197,8 +197,8 @@ export default function CircuitForm({ barId, bars, onClose, onCreated, editingCi
           )}
           {/* Bloque de potencia: PI y FD son editables; MD se calcula automáticamente y es de solo lectura */}
           <div className="grid grid-cols-3 gap-4">
-            <Input label="PI (kW) *" type="number" step="0.01" min="0" value={piKw} onChange={(e) => setPiKw(e.target.value)} />
-            <Input label="F.D" type="number" step="0.0001" min="0" max="1" value={fd} onChange={(e) => setFd(e.target.value)} />
+            <Input label="PI (kW) *" type="number" step="0.01" min="0" value={piKw} onChange={(e) => setPiKw(e.target.value)} placeholder="Ej: 34.83" />
+            <Input label="F.D" type="number" step="0.0001" min="0" max="1" value={fd} onChange={(e) => setFd(e.target.value)} placeholder="0.0 – 1.0  Ej: 0.41" />
             <div>
               <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">MD (kW)</label>
               {/* MD = PI × FD — campo de solo lectura, actualizado en tiempo real */}

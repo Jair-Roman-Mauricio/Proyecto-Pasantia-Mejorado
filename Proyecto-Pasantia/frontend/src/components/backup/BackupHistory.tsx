@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, RotateCcw, Trash2, Download, Database } from 'lucide-react';
+import { Plus, RotateCcw, Trash2, Download } from 'lucide-react';
 import { backupService } from '../../services/backupService';
 import { useAuth } from '../../context/AuthContext';
 import type { Backup } from '../../types';

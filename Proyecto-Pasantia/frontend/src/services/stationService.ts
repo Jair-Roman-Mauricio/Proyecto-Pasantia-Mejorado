@@ -62,7 +62,7 @@ export const stationService = {
    * Recalcula la demanda y el estado de la estación después del cambio.
    */
   async updateCapacity(id: number, transformerCapacityKw: number): Promise<Station> {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('stations')
       .update({ transformer_capacity_kw: transformerCapacityKw })
       .eq('id', id)
